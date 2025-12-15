@@ -1,5 +1,5 @@
 // ============================================================
-// [설정] 본인의 구글 시트 링크 (수정한 시트 주소가 같다면 그대로 둬도 돼!)
+// [설정] 본인의 구글 시트 링크
 // ============================================================
 const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRSpGfIs01pu73z_aKvjqdAH0m3UpctkMONg-1HzigUHk-R-nK6wVxewKy35cSg6fIFcRc9S80-V1NY/pub?gid=0&single=true&output=csv"; 
 // ============================================================
@@ -11,13 +11,12 @@ let currentIndex = 0;
 let score = 0;
 let wrongAnswers = [];
 
-let selectedMode = '';      // 'recent' or 'random' or 'weakness_quiz'
-let selectedCategory = '';  // 'all' or 특정 카테고리명
+let selectedMode = '';      
+let selectedCategory = '';  
 let quizDirection = 'eng-to-kor'; 
 
-// 화면 요소들
 const startScreen = document.getElementById('start-screen');
-const categoryScreen = document.getElementById('category-screen'); // NEW
+const categoryScreen = document.getElementById('category-screen'); 
 const directionScreen = document.getElementById('direction-screen');
 const loadingScreen = document.getElementById('loading-screen');
 const quizScreen = document.getElementById('quiz-screen');
@@ -52,63 +51,55 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 1. 모드 선택 (Recent / Random) -> 카테고리 선택으로 이동
+// 1. 모드 선택 -> 카테고리 선택
 function selectMode(mode) {
     selectedMode = mode;
     startScreen.classList.add('hidden');
-    
-    // 카테고리 화면 준비 및 이동
     prepareCategoryButtons();
     categoryScreen.classList.remove('hidden');
 }
 
-// [NEW] 카테고리 버튼 생성 함수
+// 카테고리 버튼 생성
 function prepareCategoryButtons() {
     const catListDiv = document.getElementById('category-list');
-    catListDiv.innerHTML = ""; // 초기화
+    catListDiv.innerHTML = ""; 
 
-    // 1. 전체 보기 버튼 (항상 맨 위)
     const allBtn = document.createElement('button');
     allBtn.className = "btn-mode mode-blue";
     allBtn.innerHTML = `<strong>🌈 전체 주제 섞어서</strong><span>주제 상관없이 다 공부할래요</span>`;
     allBtn.onclick = () => selectCategory('all');
     catListDiv.appendChild(allBtn);
 
-    // 2. 데이터에서 유니크한 카테고리 추출
-    // (데이터의 4번째 칸이 category라고 가정)
-    const categories = [...new Set(fullData.map(item => item.category).filter(c => c))]; // 빈값 제거
+    const categories = [...new Set(fullData.map(item => item.category).filter(c => c))];
 
-    // 3. 카테고리별 버튼 생성
     categories.forEach(cat => {
         const btn = document.createElement('button');
-        btn.className = "btn-mode mode-blue"; // 파란색 테마
+        btn.className = "btn-mode mode-blue"; 
         btn.innerHTML = `<strong>${cat}</strong><span>집중 공략하기</span>`;
         btn.onclick = () => selectCategory(cat);
         catListDiv.appendChild(btn);
     });
 }
 
-// 2. 카테고리 선택 -> 방향 선택으로 이동
+// 2. 카테고리 선택 -> 방향 선택
 function selectCategory(category) {
     selectedCategory = category;
     categoryScreen.classList.add('hidden');
     directionScreen.classList.remove('hidden');
 }
 
-// (뒤로가기) 방향 선택 -> 카테고리 선택
 function backToCategory() {
     directionScreen.classList.add('hidden');
     categoryScreen.classList.remove('hidden');
 }
 
-// 3. 퀴즈 시작 (데이터 필터링 포함)
+// 3. 퀴즈 시작
 function startQuiz(direction) {
     quizDirection = direction;
     directionScreen.classList.add('hidden');
     
-    // 모드에 따라 데이터 준비
     if (selectedMode === 'weakness_quiz') {
-        // 약점 퀴즈는 startWeaknessQuiz에서 이미 quizData 세팅됨
+        // startWeaknessQuiz에서 이미 설정됨
     } else {
         setupQuizData(selectedMode, selectedCategory);
     }
@@ -129,28 +120,23 @@ function startQuiz(direction) {
     loadQuestion();
 }
 
-// [NEW] 데이터 세팅 로직 (필터링 -> 슬라이싱)
+// 데이터 세팅 (필터링 -> 슬라이싱)
 function setupQuizData(mode, category) {
-    // 1. 먼저 카테고리로 필터링
     let targetData = fullData;
     if (category !== 'all') {
         targetData = fullData.filter(item => item.category === category);
     }
 
-    // 2. 모드 적용 (최신 / 랜덤)
     if (mode === 'recent') {
-        // 최신 10개 (데이터의 끝부분)
         quizData = targetData.slice(-10); 
     } else if (mode === 'random') {
-        // 랜덤 섞어서 10개
         const shuffled = [...targetData].sort(() => 0.5 - Math.random());
         quizData = shuffled.slice(0, 10);
     } else {
-        quizData = targetData; // 혹시 모를 전체 모드
+        quizData = targetData; 
     }
 }
 
-// 문제 로드
 function loadQuestion() {
     if (currentIndex >= quizData.length) {
         showResult();
@@ -162,7 +148,6 @@ function loadQuestion() {
     
     const item = quizData[currentIndex];
     
-    // 상단에 주제 표시
     const catTag = document.getElementById('quiz-category-tag');
     catTag.innerText = item.category ? `[${item.category}]` : "[주제 없음]";
 
@@ -185,7 +170,6 @@ function loadQuestion() {
     }
 }
 
-// 기타 기능들 (이전과 동일하거나 미세 조정)
 function showAnswer() {
     document.getElementById('btn-show-answer').classList.add('hidden');
     document.getElementById('answer-area').classList.remove('hidden');
@@ -198,7 +182,6 @@ function submitResult(isCorrect) {
         const item = quizData[currentIndex];
         wrongAnswers.push(item);
         
-        // 약점 저장
         const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
         if (storedData[item.eng]) storedData[item.eng]++;
         else storedData[item.eng] = 1;
@@ -234,7 +217,6 @@ function showResult() {
     }
 }
 
-// 약점 관리
 function openWeaknessManager() {
     startScreen.classList.add('hidden');
     weaknessScreen.classList.remove('hidden');
@@ -264,7 +246,6 @@ function renderWeaknessList() {
         const originalItem = fullData.find(d => d.eng === engWord);
         const trans = originalItem ? originalItem.trans : "(데이터 없음)";
         
-        // 카테고리 뱃지 추가
         const categoryBadge = originalItem && originalItem.category 
             ? `<span style="font-size:0.7rem; background:#eee; padding:2px 6px; border-radius:4px; color:#555; margin-left:5px;">${originalItem.category}</span>` 
             : "";
@@ -309,7 +290,6 @@ function startWeaknessQuiz() {
     startQuiz('eng-to-kor'); 
 }
 
-// CSV 파싱 (4번째 컬럼 category 추가)
 function parseCSV(text) {
     const lines = text.trim().split('\n');
     const result = [];
@@ -320,7 +300,6 @@ function parseCSV(text) {
                 eng: row[0].replace(/^"|"$/g, '').trim(),
                 lit: row[1].replace(/^"|"$/g, '').trim(),
                 trans: row[2].replace(/^"|"$/g, '').trim(),
-                // 4번째 칸이 있으면 넣고 없으면 빈 문자열
                 category: row[3] ? row[3].replace(/^"|"$/g, '').trim() : ""
             });
         }
@@ -346,21 +325,23 @@ function parseCSVRow(row) {
     return result;
 }
 
+// [수정된 부분] 전체 리스트 1번부터 표시
 function viewAllList() {
     startScreen.classList.add('hidden');
     listScreen.classList.remove('hidden');
     
     const listUl = document.getElementById('full-list');
     listUl.innerHTML = ""; 
-    const displayData = [...fullData].reverse();
-
-    displayData.forEach((item, index) => {
-        const originalIndex = fullData.length - index;
+    
+    // 이전에는 .reverse() 했지만, 이제는 그대로 사용 (fullData 순서대로 = 1번부터)
+    fullData.forEach((item, index) => {
+        // 인덱스도 1부터 차례대로
+        const currentIndex = index + 1;
         const catBadge = item.category ? `<span style="background:#eee; padding:2px 6px; border-radius:4px; font-size:0.7rem; color:#666; margin-left:5px;">${item.category}</span>` : "";
         
         const li = document.createElement('li');
         li.innerHTML = `
-            <div style="font-size:0.8rem; color:#999; margin-bottom:5px;">No.${originalIndex} ${catBadge}</div>
+            <div style="font-size:0.8rem; color:#999; margin-bottom:5px;">No.${currentIndex} ${catBadge}</div>
             <div style="font-weight:bold; color:#1565c0; font-size:1.1rem;">${item.eng}</div>
             <div style="font-size:0.9rem; color:#666;">${item.lit ? '(직역) '+item.lit : ''}</div>
             <div style="font-weight:bold; color:#e65100; margin-top:5px;">➥ ${item.trans}</div>
@@ -378,7 +359,7 @@ function goHome() {
     resultScreen.classList.add('hidden');
     wrongNoteScreen.classList.add('hidden');
     listScreen.classList.add('hidden');
-    categoryScreen.classList.add('hidden'); // NEW
+    categoryScreen.classList.add('hidden'); 
     directionScreen.classList.add('hidden');
     weaknessScreen.classList.add('hidden');
     

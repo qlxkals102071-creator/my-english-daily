@@ -19,21 +19,34 @@
 
         <div id="start-screen" class="hidden">
             <h1>구글 시트 영단어장</h1>
-            <p style="margin-bottom: 30px;">데이터 로딩 완료! 공부 모드를 선택하세요.</p>
+            <p style="margin-bottom: 20px;">데이터 로딩 완료! 공부 모드를 선택하세요.</p>
             <div class="mode-container">
                 <button class="btn-mode mode-blue" onclick="selectMode('recent')">
                     <strong>📅 오늘의 단어</strong>
-                    <span>최근 추가한 10개만 집중 공략</span>
+                    <span>선택한 주제의 [최신 10개]만 공략</span>
                 </button>
                 <button class="btn-mode mode-blue" onclick="selectMode('random')">
                     <strong>🎲 랜덤 복습</strong>
-                    <span>전체 단어 중 10개를 무작위로</span>
+                    <span>선택한 주제에서 [랜덤 10개] 뽑기</span>
                 </button>
                 <button class="btn-mode mode-blue" onclick="viewAllList()">
                     <strong>📖 전체 단어장 보기</strong>
                     <span>모든 문장과 해석을 리스트로 확인</span>
                 </button>
+                <button class="btn-mode mode-red" onclick="openWeaknessManager()">
+                    <strong>💔 약점 정복 (Top 20)</strong>
+                    <span>가장 많이 틀린 문제만 집중 케어</span>
+                </button>
             </div>
+        </div>
+
+        <div id="category-screen" class="hidden">
+            <h2>주제를 골라주세요</h2>
+            <p style="margin-bottom: 20px; color:#666;">어떤 분야를 공부할까요?</p>
+            
+            <div id="category-list" class="mode-container"></div>
+
+            <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
         </div>
 
         <div id="direction-screen" class="hidden">
@@ -45,20 +58,19 @@
                     <strong>🇺🇸 영어 ➔ 🇰🇷 한글</strong>
                     <span>기본 모드: 영단어를 보고 뜻 맞추기</span>
                 </button>
-                
                 <button class="btn-mode mode-orange" onclick="startQuiz('kor-to-eng')">
                     <strong>🇰🇷 한글 ➔ 🇺🇸 영어</strong>
                     <span>매운맛: 뜻을 보고 영어 철자 맞추기</span>
                 </button>
             </div>
-
-            <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
+            <button class="btn-back" onclick="backToCategory()">뒤로 가기</button>
         </div>
 
         <div id="quiz-screen" class="hidden">
             <h2 id="progress-text"></h2>
             
             <div class="question-box">
+                <div id="quiz-category-tag" style="font-size:0.8rem; color:#999; margin-bottom:5px;"></div>
                 <span id="q-main" class="main-text"></span>
                 <span id="q-sub" class="sub-text"></span>
             </div>
@@ -83,24 +95,41 @@
             <h2 id="score-text" style="font-size: 3rem; color: #2196F3; margin: 10px 0;"></h2>
             <p id="sub-score-text" style="color: #666; margin-bottom: 20px;"></p>
             <p id="feedback-text" style="font-weight: bold;"></p>
-            
-            <button class="btn-note" onclick="showWrongNote()">오답 노트 보기</button>
+            <button class="btn-note" onclick="showWrongNote()">이번 퀴즈 오답 보기</button>
             <button class="btn-retry" onclick="goHome()">메뉴로 돌아가기</button>
         </div>
 
         <div id="wrong-note-screen" class="hidden">
-            <h1>오답 노트</h1>
+            <h1>이번 퀴즈 오답</h1>
             <ul id="wrong-list"></ul>
             <button class="btn-back" onclick="closeWrongNote()">닫기</button>
         </div>
 
         <div id="list-screen" class="hidden">
             <h1>전체 단어 리스트</h1>
-            <p style="color:#666; margin-bottom:15px;">등록된 모든 단어를 확인합니다.</p>
             <div class="list-container">
                 <ul id="full-list"></ul>
             </div>
             <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
+        </div>
+
+        <div id="weakness-screen" class="hidden">
+            <h1 style="color:#e53935;">💔 약점 Top 20</h1>
+            <p style="color:#666; margin-bottom:15px;">많이 틀린 순서대로 최대 20개만 보여요.</p>
+            
+            <div class="list-container">
+                <ul id="weakness-list"></ul>
+            </div>
+
+            <button class="btn-mode mode-red" id="btn-start-weakness" onclick="startWeaknessQuiz()" style="margin-top:10px; text-align:center;">
+                <strong>🔥 이 단어들로 복습하기</strong>
+            </button>
+
+            <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
+            
+            <p style="margin-top: 30px;">
+                <button style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem;" onclick="resetWeaknessData()">모든 기록 초기화 (삭제)</button>
+            </p>
         </div>
 
     </div>

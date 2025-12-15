@@ -1,0 +1,72 @@
+body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; text-align: center; }
+
+.container { position: relative; background-color: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+
+h1 { margin-bottom: 20px; color: #333; margin-top: 10px; }
+.question-box { margin-bottom: 30px; padding: 20px; background-color: #e3f2fd; border-radius: 10px; min-height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center;}
+
+.main-text { font-size: 1.4rem; font-weight: bold; color: #1565c0; margin-bottom: 10px; display: block; word-break: keep-all; }
+.sub-text { font-size: 1rem; color: #555; font-style: italic; }
+
+.answer-box { margin-top: 20px; padding: 20px; background-color: #fff3e0; border-radius: 10px; border: 2px solid #ffe0b2; }
+.answer-text { font-size: 1.2rem; font-weight: bold; color: #e65100; word-break: keep-all; }
+
+button { width: 100%; padding: 15px; margin: 5px 0; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+.btn-show { background-color: #2196F3; color: white; }
+.btn-correct { background-color: #4CAF50; color: white; width: 48%; }
+.btn-wrong { background-color: #f44336; color: white; width: 48%; }
+.btn-note { background-color: #FF9800; color: white; }
+.btn-retry { background-color: #607D8B; color: white; }
+.btn-back { background-color: #9E9E9E; color: white; margin-top: 20px;}
+
+.hidden { display: none; }
+
+/* 리스트 스타일 */
+#wrong-list, #full-list { text-align: left; list-style: none; padding: 0; }
+#wrong-list li, #full-list li { background: #fff; border-bottom: 1px solid #ddd; padding: 15px; }
+
+.list-container {
+    max-height: 400px; 
+    overflow-y: auto;  
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fafafa;
+    margin-bottom: 10px;
+}
+
+.mode-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+
+/* [수정됨] 버튼 공통 스타일 */
+.btn-mode { 
+    background-color: white; 
+    border: 2px solid #e0e0e0; /* 기본 회색 테두리 */
+    border-radius: 12px; 
+    padding: 20px; 
+    text-align: left; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    position: relative; 
+    overflow: hidden; 
+}
+.btn-mode:active { transform: scale(0.98); background-color: #f5f5f5; }
+.btn-mode strong { display: block; font-size: 1.2rem; margin-bottom: 5px; color: #333; }
+.btn-mode span { font-size: 0.9rem; color: #757575; }
+.btn-mode::after { content: '➔'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #bdbdbd; font-size: 1.5rem; }
+
+/* [추가됨] 파란색 테마 (기본/영어) */
+.mode-blue { border-color: #90CAF9; }
+.mode-blue strong { color: #1565c0; }
+.mode-blue:hover { background-color: #e3f2fd; border-color: #2196F3; }
+.mode-blue::after { color: #90CAF9; }
+
+/* [추가됨] 주황색 테마 (심화/한글) */
+.mode-orange { border-color: #FFCC80; }
+.mode-orange strong { color: #E65100; }
+.mode-orange:hover { background-color: #fff3e0; border-color: #FF9800; }
+.mode-orange::after { color: #FFCC80; }
+
+.top-btn { position: absolute; top: 15px; width: auto; padding: 5px 10px; background: none; font-size: 1.5rem; color: #757575; z-index: 100; }
+.top-btn:hover { background-color: #f5f5f5; border-radius: 50%; }
+.btn-home { left: 10px; }
+.btn-finish { right: 10px; font-size: 1.2rem; font-weight: bold; top: 18px; }

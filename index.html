@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나만의 구글 시트 단어장</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <button id="btn-home" class="top-btn btn-home hidden" onclick="goHome()">🏠</button>
+        <button id="btn-finish" class="top-btn btn-finish hidden" onclick="finishQuizEarly()">🏁 종료</button>
+
+        <div id="loading-screen">
+            <h2>데이터 불러오는 중...</h2>
+            <p>구글 시트와 연결하고 있습니다.</p>
+        </div>
+
+        <div id="start-screen" class="hidden">
+            <h1>구글 시트 영단어장</h1>
+            <p style="margin-bottom: 30px;">데이터 로딩 완료! 공부 모드를 선택하세요.</p>
+            <div class="mode-container">
+                <button class="btn-mode mode-blue" onclick="selectMode('recent')">
+                    <strong>📅 오늘의 단어</strong>
+                    <span>최근 추가한 10개만 집중 공략</span>
+                </button>
+                <button class="btn-mode mode-blue" onclick="selectMode('random')">
+                    <strong>🎲 랜덤 복습</strong>
+                    <span>전체 단어 중 10개를 무작위로</span>
+                </button>
+                <button class="btn-mode mode-blue" onclick="viewAllList()">
+                    <strong>📖 전체 단어장 보기</strong>
+                    <span>모든 문장과 해석을 리스트로 확인</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="direction-screen" class="hidden">
+            <h2>어떻게 공부할까요?</h2>
+            <p style="margin-bottom: 20px; color:#666;">학습 방법을 선택해주세요.</p>
+            
+            <div class="mode-container">
+                <button class="btn-mode mode-blue" onclick="startQuiz('eng-to-kor')">
+                    <strong>🇺🇸 영어 ➔ 🇰🇷 한글</strong>
+                    <span>기본 모드: 영단어를 보고 뜻 맞추기</span>
+                </button>
+                
+                <button class="btn-mode mode-orange" onclick="startQuiz('kor-to-eng')">
+                    <strong>🇰🇷 한글 ➔ 🇺🇸 영어</strong>
+                    <span>매운맛: 뜻을 보고 영어 철자 맞추기</span>
+                </button>
+            </div>
+
+            <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <h2 id="progress-text"></h2>
+            
+            <div class="question-box">
+                <span id="q-main" class="main-text"></span>
+                <span id="q-sub" class="sub-text"></span>
+            </div>
+            
+            <button id="btn-show-answer" class="btn-show" onclick="showAnswer()">정답 확인</button>
+            
+            <div id="answer-area" class="hidden">
+                <div class="answer-box">
+                    <div id="a-main" class="answer-text"></div>
+                    <div id="a-sub" style="color:#666; margin-top:5px; font-style:italic;"></div>
+                </div>
+                <p style="margin-top:15px;">결과 선택</p>
+                <div>
+                    <button class="btn-correct" onclick="submitResult(true)">O (정답)</button>
+                    <button class="btn-wrong" onclick="submitResult(false)">X (오답)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <h1>결과 확인</h1>
+            <h2 id="score-text" style="font-size: 3rem; color: #2196F3; margin: 10px 0;"></h2>
+            <p id="sub-score-text" style="color: #666; margin-bottom: 20px;"></p>
+            <p id="feedback-text" style="font-weight: bold;"></p>
+            
+            <button class="btn-note" onclick="showWrongNote()">오답 노트 보기</button>
+            <button class="btn-retry" onclick="goHome()">메뉴로 돌아가기</button>
+        </div>
+
+        <div id="wrong-note-screen" class="hidden">
+            <h1>오답 노트</h1>
+            <ul id="wrong-list"></ul>
+            <button class="btn-back" onclick="closeWrongNote()">닫기</button>
+        </div>
+
+        <div id="list-screen" class="hidden">
+            <h1>전체 단어 리스트</h1>
+            <p style="color:#666; margin-bottom:15px;">등록된 모든 단어를 확인합니다.</p>
+            <div class="list-container">
+                <ul id="full-list"></ul>
+            </div>
+            <button class="btn-back" onclick="goHome()">메뉴로 돌아가기</button>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -51,14 +51,22 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 1. 모드 선택 -> 카테고리 선택
+// 1. 모드 선택 함수 (수정됨)
+// 'recent' 모드일 때는 카테고리 선택 화면을 건너뛰고 바로 '전체' 주제로 설정해버려!
 function selectMode(mode) {
     selectedMode = mode;
     startScreen.classList.add('hidden');
-    prepareCategoryButtons();
-    categoryScreen.classList.remove('hidden');
-}
 
+    // [변경] '최신 10개' 모드면 -> 카테고리 선택 건너뛰고 바로 방향 선택으로 직행!
+    if (mode === 'recent') {
+        // 강제로 '전체(all)' 카테고리를 선택한 것처럼 처리해서 함수 호출
+        selectCategory('all'); 
+    } else {
+        // '랜덤' 모드 등 다른 건 기존처럼 카테고리 선택 화면 보여주기
+        prepareCategoryButtons();
+        categoryScreen.classList.remove('hidden');
+    }
+}
 // 카테고리 버튼 생성
 function prepareCategoryButtons() {
     const catListDiv = document.getElementById('category-list');
@@ -88,9 +96,18 @@ function selectCategory(category) {
     directionScreen.classList.remove('hidden');
 }
 
+// 2. 뒤로 가기 함수 (수정됨)
+// 방향 선택 화면에서 '뒤로 가기' 눌렀을 때, '최신 모드'였으면 홈으로 가야 해!
 function backToCategory() {
     directionScreen.classList.add('hidden');
-    categoryScreen.classList.remove('hidden');
+
+    // [변경] 최신 모드(recent)는 카테고리 화면을 안 거쳤으니까, 바로 홈으로 보내기
+    if (selectedMode === 'recent') {
+        startScreen.classList.remove('hidden');
+    } else {
+        // 다른 모드는 원래대로 카테고리 선택 화면으로 이동
+        categoryScreen.classList.remove('hidden');
+    }
 }
 
 // 3. 퀴즈 시작

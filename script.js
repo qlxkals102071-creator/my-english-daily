@@ -296,12 +296,17 @@ function resetWeaknessData() {
 function startWeaknessQuiz() {
     const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
     let sortedKeys = Object.entries(storedData).sort((a, b) => b[1] - a[1]).map(i => i[0]);
-    if (sortedKeys.length > 20) sortedKeys = sortedKeys.slice(0, 20); 
-
+    
+    if (sortedKeys.length > 20) sortedKeys = sortedKeys.slice(0, 20);
+    
     quizData = fullData.filter(item => sortedKeys.includes(item.eng));
+    // 틀린 순서대로(sortedKeys 순서대로) 퀴즈 데이터 정렬
     quizData.sort((a, b) => sortedKeys.indexOf(a.eng) - sortedKeys.indexOf(b.eng));
 
     if(quizData.length === 0) return alert("퀴즈를 낼 단어가 없어요.");
+
+    // [✨ 여기가 수정된 부분!] 약점 관리 화면을 숨겨라! 얍!
+    weaknessScreen.classList.add('hidden'); 
 
     selectedMode = 'weakness_quiz';
     startQuiz('eng-to-kor'); 
